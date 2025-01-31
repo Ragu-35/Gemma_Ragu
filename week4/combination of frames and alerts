@@ -1,0 +1,67 @@
+package week4.homework;
+
+import java.time.Duration;
+import java.util.Scanner;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Frames {
+
+	public static void main(String[] args) throws InterruptedException {
+		// TODO Auto-generated method stub
+		
+		ChromeDriver driver=new ChromeDriver();
+		driver.get("https://www.w3schools.com/js/tryit.asp?filename=tryjs_prompt");
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(8));
+				
+		
+		//Switch to the frame
+		driver.switchTo().frame("iframeResult");
+		
+		//- Click the "Try It" button inside the frame
+		driver.findElement(By.xpath("//button[text()='Try it']")).click();
+		
+		//changing focus to alert
+		Alert text = driver.switchTo().alert();
+				
+		/* input the text and accept the alert
+		text.sendKeys("Ragu");
+		text.accept(); */
+							
+		//inorder to verify the enter text , we need to store in the variable and compare
+		System.out.println("Enter your desired name");
+		Scanner sc=new Scanner(System.in);
+		String a= sc.next();
+		
+		//* get the text and accept the alert
+		text.sendKeys(a);
+		text.accept();
+		
+		//- Confirm the action is performed correctly by verifying the text displayed
+				
+		//step 1: - get the printed sentence and store it
+		String text2 = driver.findElement(By.id("demo")).getText();
+			
+		
+		//check the input name is reflecting or not
+		
+		if(text2.contains(a))
+		{
+			System.out.println("correct text is displaying");
+		} 
+		else
+		{ 
+			System.out.println("incorrect text is displaying");
+		
+		}
+		
+		Thread.sleep(8000);
+		driver.close();
+		sc.close();
+	}
+
+}
