@@ -1,0 +1,100 @@
+package week4.homework;
+
+import java.awt.Window;
+import java.sql.Driver;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+
+import callingchrome.Runningchrome;
+
+public class WindowHandling extends Runningchrome {
+
+	public static void main(String[] args) throws InterruptedException {
+	
+		WindowHandling obj =new WindowHandling();
+		obj.chrome();
+		
+		//- Enter the username and password.
+		obj.driver.findElement(By.id("username")).sendKeys("demosalesmanager");
+		
+		obj.driver.findElement(By.id("password")).sendKeys("crmsfa");
+		
+		//Click on the Login button.
+		obj.driver.findElement(By.className("decorativeSubmit")).click();
+		
+		// click on the "CRM/SFA" link
+		obj.driver.findElement(By.partialLinkText("CRM")).click();
+		
+		//Click on the Contacts button.
+		obj.driver.findElement(By.partialLinkText("Contacts")).click();
+		
+		//Click on Merge Contacts.
+		obj.driver.findElement(By.partialLinkText("Merge Contacts")).click();
+		
+		//Click on the widget of the "From Contact".
+		obj.driver.findElement(By.xpath("//img[@alt='Lookup']")).click();
+		
+		//clicking on the widget, new window opens, now change the focus
+		
+		//get all window address
+		Set<String> windowHandles = obj.driver.getWindowHandles();
+		
+		//convert set to list
+		List<String> listwindow = new ArrayList<String>(windowHandles);
+		
+		//changing the focus to child window 1
+		obj.driver.switchTo().window(listwindow.get(1));
+			
+		//- Click on the first resulting contact.
+		obj.driver.findElement(By.xpath("//div[@class='x-grid3-cell-inner x-grid3-col-partyId']/a")).click();
+		
+		
+		//now change the focus to main window - id# 0
+		obj.driver.switchTo().window(listwindow.get(0));
+		
+		//Click on the widget of the "To Contact".
+		obj.driver.findElement(By.xpath("(//img[@alt='Lookup'])[2]")).click();
+		
+		//get the window address again
+		
+		Set<String> windowHandles2 = obj.driver.getWindowHandles();
+		
+		//storing the address in set - since its windowhandleS key word
+		List<String> listwindow1 = new ArrayList<String>(windowHandles2);
+		
+		//changing the focus to child window 1
+		obj.driver.switchTo().window(listwindow1.get(1));
+					
+		//- Click on the second resulting contact.
+		obj.driver.findElement(By.xpath("(//div[@class='x-grid3-cell-inner x-grid3-col-partyId']/a)[2]")).click();
+					
+		//now change the focus to main window - id# 0
+		obj.driver.switchTo().window(listwindow.get(0));
+		
+		//clicking on the merge button
+		obj.driver.findElement(By.className("buttonDangerous")).click();
+		
+		//Accept the alert.
+		
+		//create obj for alert
+		Alert alert = obj.driver.switchTo().alert();
+		//accept the alert
+		alert.accept();
+		
+		Thread.sleep(3000);
+		
+		//Verify the title of the page.
+		
+		System.out.println(obj.driver.getTitle());
+		
+		Thread.sleep(8000);
+		//obj.driver.close();
+		
+		
+	}
+
+}
