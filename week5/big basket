@@ -1,0 +1,125 @@
+package week5homeassignment;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import org.apache.commons.collections4.Get;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.By.ByXPath;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+
+import com.google.common.io.Files;
+
+public class BigBasket {
+
+	public static void main(String[] args) throws InterruptedException {
+		// TODO Auto-generated method stub
+		
+		ChromeDriver driver=new ChromeDriver();
+		driver.get("https://www.bigbasket.com/");
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(8));
+		
+		//Click on "Shop by Category".
+		driver.findElement(By.xpath("(//span[text()='Category'])[2]")).click();
+		
+		Thread.sleep(2000);
+		
+		//Mouse over "Foodgrains, Oil & Masala".
+		WebElement Food = driver.findElement(By.xpath("(//a[contains(text(),'Foodgrains, Oil & Masala')])[2]"));
+				
+		//introducing mouse actions
+		Actions act = new Actions(driver);
+		act.moveToElement(Food).perform();
+		System.out.println(Food.getText());
+		
+		//Mouse over "Rice & Rice Products".
+		
+		WebElement rice = driver.findElement(By.xpath("//a[contains(text(),'Rice & Rice Products')]"));
+		Thread.sleep(2000);
+		act.moveToElement(rice).perform();
+		System.out.println(rice.getText());
+		
+		//Click on "Boiled & Steam Rice"
+		
+		WebElement Boiled = driver.findElement(By.xpath("//a[contains(text(),'Boiled')]"));
+		Thread.sleep(2000);
+		act.moveToElement(Boiled).click().perform();
+		System.out.println(Boiled.getText());
+		
+		//Filter the results by selecting the brand "bb Royal".
+		WebElement brand = driver.findElement(By.id("i-BBRoyal"));
+		act.scrollToElement(brand).perform();
+		act.moveToElement(brand).click().perform();
+		
+		Thread.sleep(2000);
+		
+		//Click on "Tamil Ponni Boiled Rice".
+		
+		WebElement Tamil = driver.findElement(By.xpath("//h3[contains(text(),'Tamil Ponni Boiled Rice - 12 - 17 Months Old')]"));
+		act.scrollToElement(Tamil).perform();
+		act.moveToElement(Tamil).click().perform();
+		System.out.println(Tamil.getText());
+		
+		
+		//new window opens
+		Set<String> newwindow = driver.getWindowHandles();
+		
+		//convert set to list
+		List<String>win= new ArrayList<String>(newwindow);
+		
+		//move the focus to new window
+		driver.switchTo().window(win.get(1));
+		
+		//Select the 5 Kg bag
+		Thread.sleep(2000);
+		
+		WebElement kg = driver.findElement(By.xpath("//span[text()='5 kg']"));
+		act.scrollToElement(kg).perform();
+		act.moveToElement(kg).click().perform();
+		//System.out.println(kg);
+		
+		//Check and note the price of the rice.
+		WebElement price = driver.findElement(By.xpath("(//span[@class='Label-sc-15v1nk5-0 PackSizeSelector___StyledLabel5-sc-l9rhbt-5 gJxZPQ bvikaK'])[6]"));
+		String MRP =price.getText();
+		System.out.println(MRP);
+				
+		//Click "Add" to add the bag to your cart.
+		
+		Thread.sleep(2000);
+		WebElement Addbutton = driver.findElement(By.xpath("//button[text()='Add to basket']"));
+		act.scrollToElement(Addbutton).perform();
+		act.moveToElement(Addbutton).click().perform();
+		Thread.sleep(2000);
+		
+		//Verify the success message that confirms the item was added to your cart.
+		//capture screen shot
+		 File file =((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		 //store in the local machine
+		try {
+			Files.copy(file, new File("C:\\Users\\Admin\\OneDrive\\Documents\\Screen shot from eclipse\\5.1kg.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		//Close the current window.
+		driver.close();
+		
+		//close main window;
+		
+		driver.switchTo().window(win.get(0));
+		System.out.println("Main window title is" + driver.getTitle());
+		driver.close();
+
+	}
+
+}
