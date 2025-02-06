@@ -1,0 +1,107 @@
+package week5homeassignment;
+
+import java.time.Duration;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+
+public class TestNG2 extends TestNG {
+
+	public static void main(String[] args) throws InterruptedException {
+		
+		
+		ChromeDriver driver=new ChromeDriver();
+		driver.get("https://login.salesforce.com/");
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+		
+		//Login process by feeding username and password
+		
+		driver.findElement(By.id("username")).sendKeys("vidyar@testleaf.com");			
+		driver.findElement(By.id("password")).sendKeys("Sales@123");
+		driver.findElement(By.id("Login")).click();
+		
+		Thread.sleep(2000);	
+		// TODO Auto-generated method stub
+		
+		//Click on the toggle menu button from the left corner
+				driver.findElement(By.xpath("//div[@class='slds-icon-waffle']")).click();
+				
+				//- Click View All and click Legal Entities from App Launcher
+				driver.findElement(By.xpath("//button[text()='View All']")).click();	
+				
+				Actions act= new Actions(driver);			
+								
+				//Click on New Legal Entity
+				WebElement hover1 = driver.findElement(By.xpath("//p[text()='Legal Entities'] "));
+				act.scrollToElement(hover1).perform();
+				act.click(hover1).perform();
+				
+				//Click on the Dropdown icon in the legal Entities tab		
+				WebElement ele = driver.findElement(By.xpath("//span[text()='Legal Entities']/following::a"));
+				driver.executeScript("arguments[0].click();", ele);
+				
+				//- Click on New Legal Entity in the drop down
+				WebElement ele12 = driver.findElement(By.xpath("//span[text()='New Legal Entity']"));
+				driver.executeScript("arguments[0].click();",ele12);
+				
+				String name="Ragul";
+				
+				//- Enter Name as 'Salesforce Automation by *Your Name*'
+				driver.findElement(By.xpath("(//input[@class='slds-input' and @maxlength='255'])[1]")).sendKeys(name);
+				
+				String c="TestLeaf";
+				//Enter the Company name as 'TestLeaf'.
+				driver.findElement(By.xpath("(//input[@class='slds-input' and @maxlength='255'])[2]")).sendKeys(c);
+				
+				//Enter Description as 'Salesforces'.
+				driver.findElement(By.xpath("(//textarea[@class='slds-textarea' and @maxlength='255'])[2]")).sendKeys("Salesforces");
+				
+				Thread.sleep(3000);
+				
+				/* WebElement ele4 = driver.findElement(By.xpath("//div[@class='test-id__section slds-section slds-m-vertical_none has-header slds-is-open slds-p-bottom_medium']"));
+				act.scrollToElement(ele4).perform();
+								
+				//Select Status as 'Active
+				WebElement ele3 = driver.findElement(By.xpath("//span[text()='--None--']"));
+				act.scrollToElement(ele3).perform();
+				act.moveToElement(ele3).click().perform();*/
+				
+				//Select Status as 'Active
+				WebElement statusDropdown = driver.findElement(By.xpath("//span[text()='--None--']"));
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].click();", statusDropdown);
+				
+				WebElement activeOption = driver.findElement(By.xpath("//span[text()='Active']"));
+				js.executeScript("arguments[0].click();", activeOption);
+			
+				//clicking on save
+				driver.findElement(By.xpath("//button[text()='Save']")).click();
+				
+				//Verify the Alert message (Complete this field) displayed for Name
+				
+				Thread.sleep(2000);										
+				
+				WebElement alertMessage = driver.findElement(By.xpath("//span[contains(@class, 'toastMessage slds-text-heading--small forceActionsText')]"));
+				
+		        if (alertMessage.isDisplayed()) 
+		        {
+		            System.out.println("Alert message is displayed: " + alertMessage.getText());
+		        } else {
+		            System.out.println("Alert message is not displayed.");
+		        }
+
+		        // Close the browser at the end
+		        driver.quit();
+				
+				
+				
+				
+			}
+
+
+}
