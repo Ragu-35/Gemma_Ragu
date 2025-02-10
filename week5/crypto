@@ -1,0 +1,51 @@
+package week5homeassignment;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+
+public class Crypto {
+
+	public static void main(String[] args) throws InterruptedException {
+		// TODO Auto-generated method stub
+
+		ChromeDriver driver=new ChromeDriver();
+		driver.get("https://finance.yahoo.com/");		
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(8));
+		
+		
+		//locate the crypto under more options
+		WebElement mouhover = driver.findElement(By.xpath("//span[text()='More']"));
+		
+		Actions act=new Actions(driver);
+		act.moveToElement(mouhover).perform();
+		
+		driver.findElement(By.xpath("(//a[text()='Crypto '])[3]")).click();
+	
+		//crypto names are
+		
+		//Storing the value in the list and check
+		List <WebElement> crypto =  driver.findElements(By.xpath("//td[@class='cell tw-h-10 tw-py-0 tw-text-left yf-paf8n5']"));
+		
+		//declaring the list
+		List<String> name =new ArrayList<String>();
+		
+		//storing into the list
+		for (WebElement we : crypto) {
+			
+			String text = we.getText();
+			name.add(text);
+			
+		}
+		System.out.println("The crypto name's are: " + name);
+		driver.close();
+		
+	}
+
+}
