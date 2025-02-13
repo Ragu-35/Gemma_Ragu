@@ -1,0 +1,85 @@
+package week5homeassignment;
+
+import java.time.Duration;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+public class TestNG2 extends Preandpostcondition {
+	
+	@Test
+	// @Parameters({"companyname","name","Description"})
+				
+	public void testcase2() throws InterruptedException 
+	{
+			
+				//Click on the toggle menu button from the left corner
+				driver.findElement(By.xpath("//div[@class='slds-icon-waffle']")).click();
+				
+				//- Click View All and click Legal Entities from App Launcher
+				driver.findElement(By.xpath("//button[text()='View All']")).click();	
+				
+				Actions act= new Actions(driver);			
+								
+				//Click on New Legal Entity
+				WebElement hover1 = driver.findElement(By.xpath("//p[text()='Legal Entities'] "));
+				act.scrollToElement(hover1).perform();
+				act.click(hover1).perform();
+				
+				//Click on the Dropdown icon in the legal Entities tab		
+				WebElement ele = driver.findElement(By.xpath("//span[text()='Legal Entities']/following::a"));
+				driver.executeScript("arguments[0].click();", ele);
+				
+				//- Click on New Legal Entity in the drop down
+				WebElement ele12 = driver.findElement(By.xpath("//span[text()='New Legal Entity']"));
+				driver.executeScript("arguments[0].click();",ele12);									
+					
+				//Enter the Company name as 'TestLeaf'.
+				String compname= "Testleaf";
+				driver.findElement(By.xpath("(//input[@class='slds-input' and @maxlength='255'])[2]")).sendKeys(compname);
+				
+				//- Enter Name as 'Salesforce Automation by *Your Name*
+				String name= "kannan";
+				driver.findElement(By.xpath("(//input[@class='slds-input' and @maxlength='255'])[1]")).sendKeys(name);
+				
+				//Enter Description as 'Salesforces'.
+				String Description= "Salesforce";
+				driver.findElement(By.xpath("(//textarea[@class='slds-textarea' and @maxlength='255'])[2]")).sendKeys(Description);
+				
+				Thread.sleep(3000);
+				
+				//Select Status as 'Active
+				
+				WebElement statusDropdown = driver.findElement(By.xpath("//span[text()='--None--']"));
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].click();", statusDropdown);
+				
+				WebElement activeOption = driver.findElement(By.xpath("//span[text()='Active']"));
+				js.executeScript("arguments[0].click();", activeOption);
+			
+				//clicking on save
+				driver.findElement(By.xpath("//button[text()='Save']")).click();
+				
+				//Verify the Alert message (Complete this field) displayed for Name
+				
+				Thread.sleep(2000);										
+				
+				WebElement alertMessage = driver.findElement(By.xpath("//span[contains(@class, 'toastMessage slds-text-heading--small forceActionsText')]"));
+				
+		        if (alertMessage.isDisplayed()) 
+		        {
+		            System.out.println("Alert message is displayed: " + alertMessage.getText());
+		        } else {
+		            System.out.println("Alert message is not displayed.");
+		        }
+		      
+	} 
+		
+}
