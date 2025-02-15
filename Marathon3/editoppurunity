@@ -1,0 +1,86 @@
+package marathon3;
+
+import java.time.Duration;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.annotations.Test;
+
+
+public class Testcase2 extends Baseclass{
+	
+@Test (dependsOnMethods= {"tc1"})
+	
+	public void edit() throws InterruptedException {
+				
+		Thread.sleep(2000);
+			
+		//9.Search for the Opportunity 'Salesforce Automation by Your Name'.
+		WebElement search = driver.findElement(By.xpath("//input[@name='Opportunity-search-input']"));
+		search.sendKeys(oppname,Keys.ENTER);
+		Thread.sleep(1500);
+			
+		//10.Click on the Dropdown icon and select 'Edit'.
+		driver.findElement(By.xpath("//a[contains(text(),'" + oppname + "')]")).click();
+			
+		//move to details tab
+		driver.findElement(By.xpath("//a[(text()='Details')]")).click();
+			
+		//Choose the close date as Tomorrow's date.
+		WebElement tomorrow = driver.findElement(By.xpath("(//span[@class='slds-grid highlights-primary-row inline-edit-trigger-icon'])[4]"));
+		tomorrow.click();
+			
+		Thread.sleep(2000);	
+					
+		//Select 'Stage' as 'Perception Analysis'. WebElement Stage 			
+		driver.findElement(By.xpath("//span[text()='--None--']/following::span[text()='Needs Analysis']")).click();		
+		driver.findElement(By.xpath("//span[text()='--None--']/following::span[text()='Perception Analysis']")).click();
+		driver.findElement(By.xpath("//button[text()='Save']")).click();
+		Thread.sleep(2000);
+		
+		//Select 'Delivery/Installation Status' as 'In Progress'!!.
+		
+		WebElement edit = driver.findElement(By.xpath("(//span[@class='slds-grid highlights-primary-row inline-edit-trigger-icon'])[15]"));		
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].click();", edit);
+	    Thread.sleep(2000);
+	    driver.findElement(By.xpath("(//span[text()='--None--'])[3]")).click();
+	    driver.findElement(By.xpath("//span[text()='--None--']/following::span[text()='In progress']")).click();	     
+	    driver.findElement(By.xpath("//button[text()='Save']")).click(); 		
+		Thread.sleep(1000);
+		
+		//Enter Description as 'SalesForce'.
+		
+		
+		WebElement des = driver.findElement(By.xpath("(//span[@class='slds-grid highlights-primary-row inline-edit-trigger-icon'])[17]"));
+		js.executeScript("arguments[0].click();", des);
+		driver.findElement(By.xpath("//textarea[@class='slds-textarea']")).sendKeys("Salesforce");
+	
+		
+		//Click on 'Save'  
+		driver.findElement(By.xpath("//button[text()='Save']")).click();
+		
+		Thread.sleep(2000);
+		
+		//verify the Stage as 'Perception Analysis'
+		WebElement verification = driver.findElement(By.xpath("//lightning-formatted-text[text()='Perception Analysis']"));
+		String text = verification.getText();
+		System.out.println("the stage is " +text);
+		
+		if(text.equalsIgnoreCase("Perception Analysis"))
+		{
+			System.out.println("Stage is Perception Analysis");
+		}
+		else
+		{
+			System.out.println("Stage is NOT with Perception Analysis");
+		}
+			
+	}
+	
+		
+
+}
