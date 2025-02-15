@@ -1,0 +1,113 @@
+package marathon3;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+public class Baseclass {
+	
+public ChromeDriver driver;	
+public String oppname="Natchimuthu";
+		
+@BeforeMethod 
+@Parameters({"url", "username", "password"})
+
+public void base(String url, String uname, String pwd) throws InterruptedException 
+{
+		// TODO Auto-generated method stub
+				
+		ChromeOptions opt = new ChromeOptions();
+		opt.addArguments("--disable-notifications"); //is used to disable the warning message in the chrome
+				
+		//1.Launch the browser.
+		driver = new ChromeDriver(opt);
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+		
+	    // 2.Load the URL: https://login.salesforce.com.
+	    driver.get(url);
+		
+		//3.Enter the username as vidyar@testleaf.com
+	    driver.findElement(By.id("username")).sendKeys(uname);
+	    
+	    //4.Enter the password as Sales@123
+	    driver.findElement(By.id("password")).sendKeys(pwd);
+	    
+	    //5.Click on the Login button.
+		driver.findElement(By.id("Login")).click();
+		
+		Thread.sleep(5000);	
+		
+		 //6.Click on the toggle menu button in the left corner.
+		driver.findElement(By.xpath("//div[@class='slds-icon-waffle']")).click();
+				   
+		// 7.Click on "View All" and select "Sales" from the App Launcher.
+		driver.findElement(By.xpath("//button[text()='View All']")).click();
+		
+		//8.Click on the "Opportunity" tab.
+		WebElement oppur = driver.findElement(By.xpath("//p[text()='Opportunities']"));
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].click();", oppur);
+		
+	}
+		
+	@Test (priority=1)
+	public void tc1() throws InterruptedException
+	{
+		//9.Click on the "New" button.
+		driver.findElement(By.xpath("//div[text()='New']")).click();
+		
+		Thread.sleep(5000);		
+		
+		// 11. Enter Amount as 75,000
+		driver.findElement(By.xpath("//div[@class='slds-form-element__control slds-grow']")).sendKeys("75000");
+		   
+		// 12.Choose the close date as Today.
+		
+		//clicking on the date
+		driver.findElement(By.xpath("(//input[@class='slds-input'])[3]")).click();
+		
+		Thread.sleep(2000);	
+				
+		//choosing today date
+		driver.findElement(By.xpath("//button[text()='Today']")).click();
+		 
+		Thread.sleep(2000);
+		
+		// 10.Enter the Opportunity name as 'Salesforce Automation by Your Name.
+		
+		WebElement name = driver.findElement(By.xpath("//label[text()='Opportunity Name']/following::input"));
+		name.sendKeys(oppname);
+		Thread.sleep(2000);
+		
+		// 13.Select 'Stage' as 'Need Analysis'.
+		
+		//clicking on the none and selecting the 'Need Analysis'
+		
+		driver.findElement(By.xpath("//span[text()='--None--']")).click();
+		Thread.sleep(1500);
+		driver.findElement(By.xpath("//span[text()='--None--']/following::span[text()='Needs Analysis']")).click();
+		//advanced xpath here used is to avoid the index based search
+		
+		Thread.sleep(2000);
+		
+		//14.Click on the 'Save' button and verify the Opportunity Name.
+		driver.findElement(By.xpath("//button[text()='Save']")).click();	
+	}	 
+
+	
+	@AfterMethod
+	public void close ()
+	{
+		driver.close();
+	}
+	
+}
