@@ -1,0 +1,57 @@
+package excelmarathon3.copy;
+
+import java.io.IOException;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public class Excel {
+
+	public static String[][] fromexcel() throws IOException {
+		
+		//locate the workbook
+		XSSFWorkbook wb= new XSSFWorkbook("./exceldata/Marathon3.xlsx");
+		//locate the sheet
+		XSSFSheet sheet = wb.getSheetAt(1);
+		//locate the row
+		XSSFRow row = sheet.getRow(1);
+		//locate the column
+		XSSFCell cell = row.getCell(0); //getcell is used for column values
+		System.out.println(cell);
+		
+		//now using method chaining concept
+		String mthodchaining = sheet.getRow(1).getCell(1).getStringCellValue();
+		System.out.println(mthodchaining);
+		
+		//get the last row count ***header row automatically omitted
+		int lastRowNum = sheet.getLastRowNum();
+		System.out.println("Row count is "+ lastRowNum);
+		
+		//want to print with count with headerrow
+		System.out.println("Actual row count is " + sheet.getPhysicalNumberOfRows());
+
+		//column count
+		int columncount = sheet.getRow(1).getLastCellNum();
+		System.out.println("column count is " + columncount);
+		
+		String data[][]= new String[lastRowNum][columncount];
+		
+		//printing the data from the excel
+		for (int i = 1; i <= lastRowNum; i++) 	
+		{
+			for (int j = 0; j < columncount; j++) 
+			{
+				
+				String all = sheet.getRow(i).getCell(j).getStringCellValue();
+				//System.out.println(all);
+				data[i-1][j]= all;
+			}
+			
+		}
+		wb.close();
+		return data;
+	}
+
+}
