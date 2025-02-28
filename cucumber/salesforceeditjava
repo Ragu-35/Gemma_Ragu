@@ -1,0 +1,240 @@
+package stepdefinition;
+
+import java.time.Duration;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.annotations.Test;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
+public class Salesforceaccountsedit {
+
+	private ChromeOptions opt;
+	private ChromeDriver driver;
+	private JavascriptExecutor js;
+	
+	//using the chrome options
+	public Salesforceaccountsedit() {
+        opt = new ChromeOptions();
+        opt.addArguments("--disable-notifications");
+        opt.addArguments("--start-maximized");    
+   	
+    	// driver.manage().window().maximize(); instead of this going to use the chrome options
+        driver =new ChromeDriver(opt);
+        js = (JavascriptExecutor) driver;
+    	driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+    	driver.get("https://login.salesforce.com/");
+	}		
+	@When("now user login into the website by providing {string}, {string} And click on login")
+	public void now_user_login_into_the_website_by_providing_loginname_pwd_and_click_on_login(String loginname, String pwd) {
+		driver.findElement(By.id("username")).sendKeys(loginname);
+		driver.findElement(By.id("password")).sendKeys(pwd);
+		driver.findElement(By.id("Login")).click();
+
+	}
+	@When("Click the App Launcher Icon next to Setup")
+	public void click_the_app_launcher_icon_next_to_setup() {
+		driver.findElement(By.xpath("//div[@class='slds-icon-waffle']")).click();
+		driver.findElement(By.xpath("//button[text()='View All']")).click();
+	    
+	}
+	@When("Select Accounts element using a valid XPath")
+	public void select_accounts_element_using_a_valid_x_path() {
+		WebElement acct = driver.findElement(By.xpath("//p[text()='Accounts']"));
+		JavascriptExecutor js= (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].click();", acct);
+	    
+	}
+	@When("Search for the account using your unique {string}")
+	public void search_for_the_account_using_your_unique_account_name(String accountname) throws InterruptedException {
+		
+	driver.findElement(By.xpath("//input[@placeholder='Search this list...']")).sendKeys(accountname,Keys.ENTER);  //searching
+	Thread.sleep(1550);		
+	    
+	}
+	@When("Click the dropdown icon next to the account And select Edit")
+	public void click_the_dropdown_icon_next_to_the_account_and_select_edit() throws InterruptedException {
+		
+	driver.findElement(By.xpath("//a[contains(text(),accountname)]")).click(); //selecting the account name
+	driver.findElement(By.xpath("//a[text()='Details']")).click(); //select the details tab
+	   
+	}
+	@When("Set Type to Technology Partner")
+	public void set_type_to_technology_partner() throws InterruptedException {
+	
+		WebElement type = driver.findElement(By.xpath("//span[text()='Edit Type']")); // selecting the edit type
+		js.executeScript("arguments[0].click();", type);
+		Thread.sleep(1000);
+		// Ensure the element is visible before clicking
+		WebElement noneOption = driver.findElement(By.xpath("(//span[text()='--None--'])[2]")); 
+		js.executeScript("arguments[0].scrollIntoView(true);", noneOption);
+		js.executeScript("arguments[0].click();", noneOption);
+		WebElement tech = driver.findElement(By.xpath("//span[text()='--None--']/following::span[text()='Technology Partner']"));
+		js.executeScript("arguments[0].scrollIntoView(true);", tech);
+		js.executeScript("arguments[0].click();", tech);
+		driver.findElement(By.xpath("//button[text()='Save']")).click(); // Saving the changes	
+	    
+	}
+	@When("Set Industry to Healthcare")
+	public void set_industry_to_healthcare() throws InterruptedException {
+	
+		WebElement industry = driver.findElement(By.xpath("//span[text()='Edit Industry']")); // selecting the edit type
+		js.executeScript("arguments[0].click();", industry);
+		Thread.sleep(1000); // Allowing time for the dropdown to appear
+
+		// Ensure the element is clickable before interacting
+		WebElement noneOption1 = driver.findElement(By.xpath("(//span[text()='--None--'])[3]"));
+		Thread.sleep(1000);
+		js.executeScript("arguments[0].scrollIntoView(true);", noneOption1);
+		js.executeScript("arguments[0].click();", noneOption1);
+
+		WebElement health= driver.findElement(By.xpath("//span[text()='--None--']/following::span[text()='Healthcare']"));
+		js.executeScript("arguments[0].scrollIntoView(true);", health); 
+		js.executeScript("arguments[0].click();", health);
+
+		driver.findElement(By.xpath("//button[text()='Save']")).click(); // Saving the changes	
+		
+	}
+	@When("Enter the Billing Address {String}")
+	public void enter_the_billing_address_parameterized_value(String billingaddress) throws InterruptedException {
+	
+		WebElement address = driver.findElement(By.xpath("//span[text()='Edit Billing Address']")); // selecting the edit type
+		js.executeScript("arguments[0].click();", address);
+		Thread.sleep(1000); // Allowing time for the dropdown to appear	
+		
+		WebElement sendaddress = driver.findElement(By.xpath("//textarea[@name='street']"));			
+		js.executeScript("arguments[0].click();", sendaddress);
+		sendaddress.sendKeys(billingaddress);
+		
+		driver.findElement(By.xpath("//button[text()='Save']")).click(); // Saving the changes
+		Thread.sleep(1000);	
+		
+	}
+	@When("Enter the Shipping Address {String}")
+	public void enter_the_shipping_address_parameterized_value(String shippingaddress) throws InterruptedException {
+	
+		WebElement address2 = driver.findElement(By.xpath("//span[text()='Edit Shipping Address']")); // selecting the edit type
+		js.executeScript("arguments[0].click();", address2);
+		Thread.sleep(1000); // Allowing time for the dropdown to appear	
+				
+		WebElement shipaddress = driver.findElement(By.xpath("(//textarea[@name='street'])[2]"));			
+		js.executeScript("arguments[0].click();", shipaddress);
+		shipaddress.sendKeys(shippingaddress);
+		
+		driver.findElement(By.xpath("//button[text()='Save']")).click(); // Saving the changes	
+		
+	}
+	@When("Set Customer Priority to Low")
+	public void set_customer_priority_to_low() throws InterruptedException {
+	
+		WebElement priority = driver.findElement(By.xpath("//span[text()='Edit Customer Priority']")); // selecting the edit type
+		js.executeScript("arguments[0].click();", priority);
+		Thread.sleep(1000); // Allowing time for the dropdown to appear
+		
+		WebElement noneOption3 = driver.findElement(By.xpath("(//span[text()='--None--'])[3]"));
+		Thread.sleep(1000);
+		js.executeScript("arguments[0].scrollIntoView(true);", noneOption3);
+		js.executeScript("arguments[0].click();", noneOption3);
+
+		WebElement low = driver.findElement(By.xpath("//span[text()='--None--']/following::span[text()='Low']"));
+		js.executeScript("arguments[0].scrollIntoView(true);", low); 
+		js.executeScript("arguments[0].click();", low);
+
+		driver.findElement(By.xpath("//button[text()='Save']")).click(); // Saving the changes	
+		
+	}
+	@When("Set SLA to Silver")
+	public void set_sla_to_silver() throws InterruptedException {
+		
+		WebElement editsla = driver.findElement(By.xpath("//span[text()='Edit SLA']")); // selecting the edit type
+		js.executeScript("arguments[0].click();", editsla);
+		Thread.sleep(1000); // Allowing time for the dropdown to appear
+		
+		WebElement noneOption4 = driver.findElement(By.xpath("//label[text()='SLA']/following::span[1]"));
+		Thread.sleep(1000);
+		js.executeScript("arguments[0].scrollIntoView(true);", noneOption4);
+		js.executeScript("arguments[0].click();", noneOption4);
+
+		WebElement silver = driver.findElement(By.xpath("//span[text()='--None--']/following::span[text()='Silver']"));
+		js.executeScript("arguments[0].scrollIntoView(true);", silver); 
+		js.executeScript("arguments[0].click();", silver);
+
+		driver.findElement(By.xpath("//button[text()='Save']")).click(); // Saving the changes	
+	    
+	}
+	@When("Set Active to NO")
+	public void set_active_to_no() throws InterruptedException {
+	
+		WebElement active = driver.findElement(By.xpath("//span[text()='Edit Active']")); // selecting the edit type
+		js.executeScript("arguments[0].click();", active);
+		Thread.sleep(1000); // Allowing time for the dropdown to appear
+		
+		WebElement noneOption5 = driver.findElement(By.xpath("//label[text()='Active']/following::span[1]"));
+		Thread.sleep(1000);
+		js.executeScript("arguments[0].scrollIntoView(true);", noneOption5);
+		js.executeScript("arguments[0].click();", noneOption5);
+
+		WebElement no = driver.findElement(By.xpath("//span[text()='--None--']/following::span[text()='No']"));
+		js.executeScript("arguments[0].scrollIntoView(true);", no); 
+		js.executeScript("arguments[0].click();", no);
+
+		driver.findElement(By.xpath("//button[text()='Save']")).click(); // Saving the changes	
+		
+	}
+	@When("Enter a unique number in the Phone field {int}")
+	public void enter_a_unique_number_in_the_phone_field_parameterized_value(Integer phone) {
+	 
+		WebElement phone1 = driver.findElement(By.xpath("//span[text()='Edit Phone']")); 
+		js.executeScript("arguments[0].click();", phone1);
+		driver.findElement(By.xpath("//input[@name='Phone']")).sendKeys(phone.toString());
+		driver.findElement(By.xpath("//button[text()='Save']")).click();		
+	}
+
+	@When("Set Upsell Opportunity to No.")
+	public void set_upsell_opportunity_to_no() throws InterruptedException {
+		
+		WebElement upsell = driver.findElement(By.xpath("//span[text()='Edit Upsell Opportunity']")); // selecting the edit type
+		js.executeScript("arguments[0].click();", upsell);
+		Thread.sleep(1000); // Allowing time for the dropdown to appear
+		
+		WebElement noneOption6 = driver.findElement(By.xpath("//label[text()='Upsell Opportunity']/following::span[1]"));
+		Thread.sleep(1000);
+		js.executeScript("arguments[0].scrollIntoView(true);", noneOption6);
+		js.executeScript("arguments[0].click();", noneOption6);
+
+		WebElement upsell1 = driver.findElement(By.xpath("//span[text()='--None--']/following::span[text()='No']"));
+		js.executeScript("arguments[0].scrollIntoView(true);", upsell1); 
+		js.executeScript("arguments[0].click();", upsell1);	
+	 
+	}
+	@When("Click Save")
+	public void click_save() {
+	  
+		driver.findElement(By.xpath("//button[text()='Save']")).click(); // Saving the changes		
+	}
+	@Then("verify the phone number")
+	public void verify_the_phone_number() {
+		
+		String expectedNumber = "89791921924";
+		// Locate the phone number using the provided XPath
+		try {
+            // Directly find the anchor element with the phone number
+            WebElement phoneNumberElement = driver.findElement(By.xpath("//span[text()='Phone']//ancestor::dt//following-sibling::dd//a"));
+
+            String actualNumber = phoneNumberElement.getText();
+            if (actualNumber.equals(expectedNumber)) {
+                System.out.println("Phone numbers match: " + actualNumber);
+            } else {
+                System.out.println("Phone numbers do not match. Expected: " + expectedNumber + ", Actual: " + actualNumber);
+            }
+        } catch (Exception e) {
+            System.out.println("Error finding phone number: " + e.getMessage());
+        } finally {
+            driver.quit();
+        }	    
+	}
+}
