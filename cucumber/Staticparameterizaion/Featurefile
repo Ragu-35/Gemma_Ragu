@@ -1,0 +1,37 @@
+Feature: Salesforce static parameterization demo
+Background:
+
+When now user login into the website by providing loginname as 'vidyar@testleaf.com'  password as 'Sales@123' And click on login
+And Click the App Launcher Icon next to Setup
+And Select Accounts element using a valid XPath
+
+Scenario: create the new account
+
+And click on the new button
+And update the Name in field of accountname as 'Jahnvai'
+And Click on the save button in the accounts window
+
+Scenario: Edit the existing user details
+
+And Search for the account using your unique accountname as <accountname>
+And Click the dropdown icon next to the account And select Edit
+And Set Type to Technology Partner
+And Set Industry to Healthcare
+And Enter the Billing Address as <Billingaddress>
+And Enter the Shipping Address as <Shippingaddress>
+And Set Customer Priority to Low
+And Set SLA to Silver
+And Set Active to NO
+And Enter a unique number in the Phone field as <phone>
+And Set Upsell Opportunity to No.
+And Click Save 
+Then verify the phone number as <phone>
+
+Examples:
+|accountname| Billingaddress                      | Shippingaddress                     | phone      |
+|Jahnavi	| 37B, Gandhiji Street, Chennai 600126| 12, Testleaf company, Chennai 600011| 9791921924 |
+ 
+     
+
+
+
